@@ -10,6 +10,7 @@ import com.andrade.dslist.repositories.GameRepository;
 import com.andrade.dslist.dto.GameDTO;
 import com.andrade.dslist.dto.GameMinDTO;
 import com.andrade.dslist.entities.Game;
+import com.andrade.dslist.projections.GameMinProjection;
 
 @Service
 public class GameService {
@@ -28,5 +29,11 @@ public class GameService {
         List<Game> result = gameRepository.findAll();
         List<GameMinDTO> dto = result.stream().map(x -> new GameMinDTO(x)).toList();
         return dto;
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDTO> findByList(Long listId) {
+        List<GameMinProjection> result = gameRepository.searchByList(listId);
+        return result.stream().map(x -> new GameMinDTO(x)).toList();
     }
 }
